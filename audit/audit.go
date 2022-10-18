@@ -57,21 +57,25 @@ func patternsOk(ppath *Ppath, commandName, section string, patterns []string) (b
 		if patternIgnored(ppath, commandName, pattern) {
 			continue
 		}
+
 		matches, err := zglob.Glob(pattern)
+		if err == nil && len(matches) > 0 {
+			continue
+		}
+
+		success = false
 		if err != nil {
-			if errors.Is(err, os.ErrNotExist) {
-				success = false
-			} else {
-				return false, fmt.Errorf("error matching %s pattern '%s' %w", section, pattern, err)
+			if !errors.Is(err, os.ErrNotExist) {
+				return false, fmt.Errorf(
+					"error matching %s pattern '%s' %w",
+					section,
+					pattern,
+					err,
+				)
 			}
 		}
 
-		if len(matches) == 0 {
-			success = false
-		}
-		if !success {
-			log.Printf("%s %s pattern %s was not found", commandName, section, pattern)
-		}
+		log.Printf("%s %s pattern %s was not found", commandName, section, pattern)
 	}
 
 	return success, nil
