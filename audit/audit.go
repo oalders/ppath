@@ -21,6 +21,8 @@ type Precious struct {
 	Commands map[string]Command
 }
 
+type matchCache map[string]bool
+
 // Paths audits the paths contained in a Precious struct and returns false if
 // any of them cannot be found.
 func Paths(config *Precious) (bool, error) {
@@ -30,6 +32,7 @@ func Paths(config *Precious) (bool, error) {
 		return false, err
 	}
 
+	seen := make(matchCache)
 	for commandName, command := range config.Commands {
 		lists := map[string][]string{
 			"exclude": patternList(command.Exclude),
@@ -37,7 +40,7 @@ func Paths(config *Precious) (bool, error) {
 		}
 		for section, list := range lists {
 			if len(list) > 0 {
-				ok, err := patternsOk(ignoreConfig, commandName, section, list)
+				ok, err := patternsOk(&seen, ignoreConfig, commandName, section, list)
 				if err != nil {
 					return false, err
 				}
@@ -51,30 +54,41 @@ func Paths(config *Precious) (bool, error) {
 	return success, nil
 }
 
-func patternsOk(ppath *Ppath, commandName, section string, patterns []string) (bool, error) {
+func patternsOk(seen *matchCache, ppath *Ppath, commandName, section string, patterns []string) (bool, error) {
 	success := true
 	for _, pattern := range patterns {
+		matched, exists := (*seen)[pattern]
+
+		if exists && matched {
+			continue
+		}
+
+		// For our purposes found and ignored are the same thing.
 		if patternIgnored(ppath, commandName, pattern) {
+			(*seen)[pattern] = true
 			continue
 		}
 
-		matches, err := zglob.Glob(pattern)
-		if err == nil && len(matches) > 0 {
-			continue
-		}
+		if !exists {
+			matches, err := zglob.Glob(pattern)
+			if err == nil && len(matches) > 0 {
+				(*seen)[pattern] = true
+				continue
+			}
 
-		success = false
-		if err != nil {
-			if !errors.Is(err, os.ErrNotExist) {
-				return false, fmt.Errorf(
-					"error matching %s pattern '%s' %w",
-					section,
-					pattern,
-					err,
-				)
+			if err != nil {
+				if !errors.Is(err, os.ErrNotExist) {
+					return false, fmt.Errorf(
+						"error matching %s pattern '%s' %w",
+						section,
+						pattern,
+						err,
+					)
+				}
 			}
 		}
 
+		(*seen)[pattern] = false
 		log.Printf("%s %s pattern %s was not found", commandName, section, pattern)
 	}
 
