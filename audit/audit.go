@@ -2,12 +2,11 @@
 package audit
 
 import (
-	"errors"
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/mattn/go-zglob"
+	"github.com/pkg/errors"
 )
 
 // Command is a single command section in the config file.
@@ -74,11 +73,11 @@ func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patt
 
 			if err != nil {
 				if !errors.Is(err, os.ErrNotExist) {
-					return false, fmt.Errorf(
-						"error matching %s pattern '%s' %w",
+					return false, errors.Wrapf(
+						err,
+						"matching %s pattern '%s'",
 						section,
 						pattern,
-						err,
 					)
 				}
 			} else if len(matches) > 0 {

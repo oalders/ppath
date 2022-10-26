@@ -2,11 +2,11 @@
 package audit
 
 import (
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/pelletier/go-toml/v2"
+	"github.com/pkg/errors"
 )
 
 // Ppath is an entire config file.
@@ -23,16 +23,21 @@ type Ppath struct {
 func PpathConfig(filename string) (*Ppath, error) {
 	var config Ppath
 	if _, err := os.Stat(filename); err != nil {
-		return &config, nil
+		if os.IsNotExist(err) {
+			return &config, nil
+		}
+		return nil, errors.Wrapf(err, "cannot stat %s", filename)
 	}
 	dat, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf(
-			"error reading ppath config file %s: %w", filename, err,
+		return nil, errors.Wrapf(
+			err,
+			"reading ppath config file %s",
+			filename,
 		)
 	}
 	if err := toml.Unmarshal(dat, &config); err != nil {
-		log.Fatalf("unmarshal %v", err)
+		errors.Wrapf(err, "unmarshal toml in %s", filename)
 	}
 
 	return &config, nil
@@ -43,8 +48,10 @@ func PpathConfig(filename string) (*Ppath, error) {
 func PreciousConfig(filename string) (*Precious, error) {
 	dat, err := os.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf(
-			"error reading precious config file %s: %w", filename, err,
+		return nil, errors.Wrapf(
+			err,
+			"reading precious config file %s",
+			filename,
 		)
 	}
 	var config Precious
