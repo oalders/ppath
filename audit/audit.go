@@ -71,10 +71,6 @@ func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patt
 
 		if !exists {
 			matches, err := zglob.Glob(pattern)
-			if err == nil && len(matches) > 0 {
-				seen[pattern] = true
-				continue
-			}
 
 			if err != nil {
 				if !errors.Is(err, os.ErrNotExist) {
@@ -85,6 +81,9 @@ func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patt
 						err,
 					)
 				}
+			} else if len(matches) > 0 {
+				seen[pattern] = true
+				continue
 			}
 		}
 
