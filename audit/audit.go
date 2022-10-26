@@ -40,7 +40,7 @@ func Paths(config *Precious) (bool, error) {
 		}
 		for section, list := range lists {
 			if len(list) > 0 {
-				ok, err := patternsOk(&seen, ignoreConfig, commandName, section, list)
+				ok, err := patternsOk(seen, ignoreConfig, commandName, section, list)
 				if err != nil {
 					return false, err
 				}
@@ -54,10 +54,10 @@ func Paths(config *Precious) (bool, error) {
 	return success, nil
 }
 
-func patternsOk(seen *matchCache, ppath *Ppath, commandName, section string, patterns []string) (bool, error) {
+func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patterns []string) (bool, error) {
 	success := true
 	for _, pattern := range patterns {
-		matched, exists := (*seen)[pattern]
+		matched, exists := seen[pattern]
 
 		if exists && matched {
 			continue
@@ -65,14 +65,14 @@ func patternsOk(seen *matchCache, ppath *Ppath, commandName, section string, pat
 
 		// For our purposes found and ignored are the same thing.
 		if patternIgnored(ppath, commandName, pattern) {
-			(*seen)[pattern] = true
+			seen[pattern] = true
 			continue
 		}
 
 		if !exists {
 			matches, err := zglob.Glob(pattern)
 			if err == nil && len(matches) > 0 {
-				(*seen)[pattern] = true
+				seen[pattern] = true
 				continue
 			}
 
@@ -88,7 +88,7 @@ func patternsOk(seen *matchCache, ppath *Ppath, commandName, section string, pat
 			}
 		}
 
-		(*seen)[pattern] = false
+		seen[pattern] = false
 		log.Printf("%s %s pattern %s was not found", commandName, section, pattern)
 	}
 
