@@ -2,7 +2,6 @@
 package audit
 
 import (
-	"log"
 	"os"
 
 	"github.com/pelletier/go-toml/v2"
@@ -56,7 +55,7 @@ func PreciousConfig(filename string) (*Precious, error) {
 	}
 	var config Precious
 	if err := toml.Unmarshal(dat, &config); err != nil {
-		log.Fatalf("unmarshal %v", err)
+		errors.Wrapf(err, "unmarshal toml in %s", filename)
 	}
 
 	return &config, nil
