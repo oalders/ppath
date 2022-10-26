@@ -29,6 +29,7 @@ func main() {
 	}
 
 	if success {
+		log.Print("All paths OK")
 		os.Exit(0)
 	}
 
