@@ -56,3 +56,18 @@ func TestPatternsOkSuccess(t *testing.T) {
 		seen,
 	)
 }
+
+func TestPatternIgnored(t *testing.T) {
+	ignoreConfig, err := PpathConfig(".ppath.toml")
+	assert.NoError(t, err)
+
+	assert.True(
+		t,
+		patternIgnored(ignoreConfig, "omegasort-gitignore", "this-does-not-exist.txt"),
+	)
+
+	assert.False(
+		t,
+		patternIgnored(ignoreConfig, "omegasort-gitignore", "this-does-not-exist"),
+	)
+}
