@@ -87,6 +87,7 @@ func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patt
 		}
 
 		seen[pattern] = false
+		success = false
 		log.Printf("%s %s pattern %s was not found", commandName, section, pattern)
 	}
 

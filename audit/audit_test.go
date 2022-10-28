@@ -25,7 +25,7 @@ func TestPaths(t *testing.T) {
 	assert.True(t, success)
 }
 
-func TestPatternsOk(t *testing.T) {
+func TestPatternsOkFailure(t *testing.T) {
 	ignoreConfig, err := PpathConfig(".ppath.toml")
 	assert.NoError(t, err)
 
@@ -33,10 +33,26 @@ func TestPatternsOk(t *testing.T) {
 	paths := []string{"foo", "bar", "go.mod", "**/*.go"}
 	ok, err := patternsOk(seen, ignoreConfig, "golangci-lint", "include", paths)
 	assert.NoError(t, err)
-	assert.True(t, ok)
+	assert.False(t, ok)
 	assert.Equal(
 		t,
 		matchCache{"bar": false, "foo": false, "go.mod": true, "**/*.go": true},
+		seen,
+	)
+}
+
+func TestPatternsOkSuccess(t *testing.T) {
+	ignoreConfig, err := PpathConfig(".ppath.toml")
+	assert.NoError(t, err)
+
+	seen := make(matchCache)
+	paths := []string{"go.mod", "**/*.go"}
+	ok, err := patternsOk(seen, ignoreConfig, "golangci-lint", "include", paths)
+	assert.NoError(t, err)
+	assert.True(t, ok)
+	assert.Equal(
+		t,
+		matchCache{"go.mod": true, "**/*.go": true},
 		seen,
 	)
 }
