@@ -42,6 +42,12 @@ func TestPpathConfig(t *testing.T) {
 	)
 }
 
+func TestPreciousConfigDoesNotExist(t *testing.T) {
+	c, err := PreciousConfig("testdata/precious-not-found.toml")
+	assert.Error(t, err)
+	assert.Empty(t, c)
+}
+
 func TestPreciousFailConfig(t *testing.T) {
 	c, err := PreciousConfig("testdata/precious-fail.toml")
 	assert.NoError(t, err)
