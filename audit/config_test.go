@@ -17,6 +17,19 @@ func init() {
 	}
 }
 
+func TestPpathConfigDoesNotExist(t *testing.T) {
+	c, err := PpathConfig("testdata/.noppath.toml")
+	assert.NoError(t, err)
+
+	var empty []string
+	assert.Equal(t, empty, c.Ignore)
+	assert.Equal(
+		t,
+		empty,
+		c.Commands["omegasort-gitignore"].Ignore,
+	)
+}
+
 func TestPpathConfig(t *testing.T) {
 	c, err := PpathConfig("testdata/.ppath.toml")
 	assert.NoError(t, err)
