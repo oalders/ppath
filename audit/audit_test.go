@@ -47,14 +47,18 @@ func TestPatternsOkSuccess(t *testing.T) {
 
 	seen := make(matchCache)
 	paths := []string{"go.mod", "**/*.go"}
-	ok, err := patternsOk(seen, ignoreConfig, "golangci-lint", "include", paths)
-	assert.NoError(t, err)
-	assert.True(t, ok)
-	assert.Equal(
-		t,
-		matchCache{"go.mod": true, "**/*.go": true},
-		seen,
-	)
+
+	// Test matching and caching
+	for i := 0; i < 2; i++ {
+		ok, err := patternsOk(seen, ignoreConfig, "golangci-lint", "include", paths)
+		assert.NoError(t, err)
+		assert.True(t, ok)
+		assert.Equal(
+			t,
+			matchCache{"go.mod": true, "**/*.go": true},
+			seen,
+		)
+	}
 }
 
 func TestPatternIgnored(t *testing.T) {
