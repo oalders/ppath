@@ -54,7 +54,7 @@ func TestPatternsOkSuccess(t *testing.T) {
 	assert.NoError(t, err)
 
 	seen := make(matchCache)
-	paths := []string{"go.mod", "**/*.go"}
+	paths := []string{"go.mod", "**/*.go", "LICENSE-MIT"}
 
 	// Test matching and caching
 	for i := 0; i < 2; i++ {
@@ -63,7 +63,7 @@ func TestPatternsOkSuccess(t *testing.T) {
 		assert.True(t, ok)
 		assert.Equal(
 			t,
-			matchCache{"go.mod": true, "**/*.go": true},
+			matchCache{"go.mod": true, "**/*.go": true, "LICENSE-MIT": true},
 			seen,
 		)
 	}
