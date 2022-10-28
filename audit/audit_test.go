@@ -25,6 +25,14 @@ func TestPaths(t *testing.T) {
 	assert.True(t, success)
 }
 
+func TestPathsFailure(t *testing.T) {
+	config, err := PreciousConfig("testdata/precious-fail.toml")
+	assert.NoError(t, err)
+	success, err := Paths(config)
+	assert.NoError(t, err)
+	assert.False(t, success)
+}
+
 func TestPatternsOkFailure(t *testing.T) {
 	ignoreConfig, err := PpathConfig(".ppath.toml")
 	assert.NoError(t, err)
