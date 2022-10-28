@@ -5,4 +5,5 @@ ignore = [
 [commands.omegasort-gitignore]
 ignore = [
     "this-does-not-exist.txt",
+    "nope*",
 ]

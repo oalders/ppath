@@ -63,7 +63,18 @@ func TestPatternIgnored(t *testing.T) {
 
 	assert.True(
 		t,
+		patternIgnored(ignoreConfig, "omegasort-gitignore", "**/node_modules/**/*"),
+		"top level ignore",
+	)
+
+	assert.True(
+		t,
 		patternIgnored(ignoreConfig, "omegasort-gitignore", "this-does-not-exist.txt"),
+	)
+
+	assert.True(
+		t,
+		patternIgnored(ignoreConfig, "omegasort-gitignore", "nope*"),
 	)
 
 	assert.False(

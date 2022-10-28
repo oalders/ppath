@@ -26,7 +26,10 @@ ignore_stderr = [
 
 [commands.ppath]
 type = "lint"
-exclude = ["this-does-not-exist.txt"]
+exclude = [
+  "this-does-not-exist.txt",
+  "nope*",
+]
 include = ["precious.toml"]
 run_mode = "files"
 cmd = ["go", "run", "main.go"]
