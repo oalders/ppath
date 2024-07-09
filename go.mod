@@ -6,7 +6,7 @@ require (
 	github.com/mattn/go-zglob v0.0.3
 	github.com/pelletier/go-toml/v2 v2.0.5
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
