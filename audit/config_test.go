@@ -19,28 +19,28 @@ func init() {
 
 func TestPpathConfigDoesNotExist(t *testing.T) {
 	t.Parallel()
-	c, err := PpathConfig("testdata/.noppath.toml")
+	config, err := PpathConfig("testdata/.noppath.toml")
 	assert.NoError(t, err)
 
 	var empty []string
-	assert.Equal(t, empty, c.Ignore)
+	assert.Equal(t, empty, config.Ignore)
 	assert.Equal(
 		t,
 		empty,
-		c.Commands["omegasort-gitignore"].Ignore,
+		config.Commands["omegasort-gitignore"].Ignore,
 	)
 }
 
 func TestPpathConfig(t *testing.T) {
 	t.Parallel()
-	c, err := PpathConfig("testdata/.ppath.toml")
+	config, err := PpathConfig("testdata/.ppath.toml")
 	assert.NoError(t, err)
 
-	assert.Equal(t, []string{`**/node_modules/**/*`}, c.Ignore)
+	assert.Equal(t, []string{`**/node_modules/**/*`}, config.Ignore)
 	assert.Equal(
 		t,
 		[]string{`**/foo/**/*`},
-		c.Commands["omegasort-gitignore"].Ignore,
+		config.Commands["omegasort-gitignore"].Ignore,
 	)
 }
 
@@ -53,7 +53,7 @@ func TestPreciousConfigDoesNotExist(t *testing.T) {
 
 func TestPreciousFailConfig(t *testing.T) {
 	t.Parallel()
-	c, err := PreciousConfig("testdata/precious-fail.toml")
+	config, err := PreciousConfig("testdata/precious-fail.toml")
 	assert.NoError(t, err)
 
 	assert.Equal(t,
@@ -61,7 +61,7 @@ func TestPreciousFailConfig(t *testing.T) {
 			Exclude: "baz",
 			Include: `**/.gitignore`,
 		},
-		c.Commands["omegasort-gitignore"],
+		config.Commands["omegasort-gitignore"],
 	)
 
 	assert.Equal(t,
@@ -69,13 +69,13 @@ func TestPreciousFailConfig(t *testing.T) {
 			Exclude: []interface{}{"foo", "bar"},
 			Include: []interface{}{`**/*.go`},
 		},
-		c.Commands["golangci-lint"],
+		config.Commands["golangci-lint"],
 	)
 }
 
 func TestPreciousSuccessConfig(t *testing.T) {
 	t.Parallel()
-	c, err := PreciousConfig("testdata/precious.toml")
+	config, err := PreciousConfig("testdata/precious.toml")
 	assert.NoError(t, err)
 
 	assert.Equal(t,
@@ -83,7 +83,7 @@ func TestPreciousSuccessConfig(t *testing.T) {
 			Exclude: nil,
 			Include: `**/.gitignore`,
 		},
-		c.Commands["omegasort-gitignore"],
+		config.Commands["omegasort-gitignore"],
 	)
 
 	assert.Equal(t,
@@ -91,6 +91,6 @@ func TestPreciousSuccessConfig(t *testing.T) {
 			Exclude: nil,
 			Include: []interface{}{`**/*.go`},
 		},
-		c.Commands["golangci-lint"],
+		config.Commands["golangci-lint"],
 	)
 }
