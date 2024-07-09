@@ -18,6 +18,7 @@ func init() {
 }
 
 func TestPpathConfigDoesNotExist(t *testing.T) {
+	t.Parallel()
 	c, err := PpathConfig("testdata/.noppath.toml")
 	assert.NoError(t, err)
 
@@ -31,6 +32,7 @@ func TestPpathConfigDoesNotExist(t *testing.T) {
 }
 
 func TestPpathConfig(t *testing.T) {
+	t.Parallel()
 	c, err := PpathConfig("testdata/.ppath.toml")
 	assert.NoError(t, err)
 
@@ -43,12 +45,14 @@ func TestPpathConfig(t *testing.T) {
 }
 
 func TestPreciousConfigDoesNotExist(t *testing.T) {
+	t.Parallel()
 	c, err := PreciousConfig("testdata/precious-not-found.toml")
 	assert.Error(t, err)
 	assert.Empty(t, c)
 }
 
 func TestPreciousFailConfig(t *testing.T) {
+	t.Parallel()
 	c, err := PreciousConfig("testdata/precious-fail.toml")
 	assert.NoError(t, err)
 
@@ -70,6 +74,7 @@ func TestPreciousFailConfig(t *testing.T) {
 }
 
 func TestPreciousSuccessConfig(t *testing.T) {
+	t.Parallel()
 	c, err := PreciousConfig("testdata/precious.toml")
 	assert.NoError(t, err)
 
