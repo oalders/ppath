@@ -25,6 +25,7 @@ func PpathConfig(filename string) (*Ppath, error) {
 		if os.IsNotExist(err) {
 			return &config, nil
 		}
+
 		return nil, errors.Wrapf(err, "cannot stat %s", filename)
 	}
 	dat, err := os.ReadFile(filename)
