@@ -81,7 +81,7 @@ func TestPreciousSuccessConfig(t *testing.T) {
 	assert.Equal(t,
 		Command{
 			Exclude: nil,
-			Include: `**/.gitignore`,
+			Include: `.gitignore`,
 		},
 		config.Commands["omegasort-gitignore"],
 	)

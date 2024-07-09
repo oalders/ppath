@@ -13,7 +13,7 @@ ok_exit_codes = 0
 
 [commands.omegasort-gitignore]
 type = "both"
-include = "**/.gitignore"
+include = ".gitignore"
 cmd = [ "omegasort", "--sort", "path", "--unique" ]
 lint_flags = "--check"
 tidy_flags = "--in-place"

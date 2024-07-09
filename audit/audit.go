@@ -4,8 +4,8 @@ package audit
 import (
 	"log"
 	"os"
+	"os/exec"
 
-	"github.com/mattn/go-zglob"
 	"github.com/pkg/errors"
 )
 
@@ -74,7 +74,8 @@ func patternsOk(
 		}
 
 		if !exists {
-			matches, err := zglob.Glob(pattern)
+			cmd := exec.Command("git", "ls-files", pattern)
+			matches, err := cmd.Output()
 
 			if err != nil {
 				if !errors.Is(err, os.ErrNotExist) {
