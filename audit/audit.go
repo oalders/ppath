@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -74,7 +75,8 @@ func patternsOk(
 		}
 
 		if !exists {
-			cmd := exec.Command("git", "ls-files", pattern)
+			gitignorePattern := translatePattern(pattern)
+			cmd := exec.Command("git", "ls-files", gitignorePattern)
 			matches, err := cmd.Output()
 
 			if err != nil {
@@ -134,4 +136,21 @@ func patternIgnored(config *Ppath, commandName, pattern string) bool {
 	}
 
 	return false
+}
+
+func translatePattern(pattern string) string {
+	if !strings.Contains(pattern, "/") {
+		pattern = "**/" + pattern
+	}
+	if strings.HasPrefix(pattern, "/") {
+		pattern = pattern[1:]
+	}
+	if strings.HasPrefix(pattern, "**/") {
+		pattern = pattern[3:]
+	}
+	if strings.HasSuffix(pattern, "/") {
+		pattern += "**"
+	}
+
+	return pattern
 }
