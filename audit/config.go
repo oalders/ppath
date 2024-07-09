@@ -37,7 +37,7 @@ func PpathConfig(filename string) (*Ppath, error) {
 		)
 	}
 	if err := toml.Unmarshal(dat, &config); err != nil {
-		errors.Wrapf(err, "unmarshal toml in %s", filename)
+		return nil, errors.Wrapf(err, "unmarshal toml in %s", filename)
 	}
 
 	return &config, nil
@@ -56,7 +56,7 @@ func PreciousConfig(filename string) (*Precious, error) {
 	}
 	var config Precious
 	if err := toml.Unmarshal(dat, &config); err != nil {
-		errors.Wrapf(err, "unmarshal toml in %s", filename)
+		return nil, errors.Wrapf(err, "unmarshal toml in %s", filename)
 	}
 
 	return &config, nil
