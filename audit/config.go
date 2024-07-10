@@ -25,6 +25,7 @@ func PpathConfig(filename string) (*Ppath, error) {
 		if os.IsNotExist(err) {
 			return &config, nil
 		}
+
 		return nil, errors.Wrapf(err, "cannot stat %s", filename)
 	}
 	dat, err := os.ReadFile(filename)
@@ -36,7 +37,7 @@ func PpathConfig(filename string) (*Ppath, error) {
 		)
 	}
 	if err := toml.Unmarshal(dat, &config); err != nil {
-		errors.Wrapf(err, "unmarshal toml in %s", filename)
+		return nil, errors.Wrapf(err, "unmarshal toml in %s", filename)
 	}
 
 	return &config, nil
@@ -55,7 +56,7 @@ func PreciousConfig(filename string) (*Precious, error) {
 	}
 	var config Precious
 	if err := toml.Unmarshal(dat, &config); err != nil {
-		errors.Wrapf(err, "unmarshal toml in %s", filename)
+		return nil, errors.Wrapf(err, "unmarshal toml in %s", filename)
 	}
 
 	return &config, nil

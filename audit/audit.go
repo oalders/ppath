@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mattn/go-zglob"
+	"github.com/oalders/go-zglob"
 	"github.com/pkg/errors"
 )
 
@@ -53,11 +53,15 @@ func Paths(config *Precious) (bool, error) {
 	return success, nil
 }
 
-func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patterns []string) (bool, error) {
+func patternsOk(
+	seen matchCache,
+	ppath *Ppath,
+	commandName, section string,
+	patterns []string,
+) (bool, error) {
 	success := true
 	for _, pattern := range patterns {
 		matched, exists := seen[pattern]
-
 		if exists && matched {
 			continue
 		}
@@ -65,6 +69,7 @@ func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patt
 		// For our purposes found and ignored are the same thing.
 		if patternIgnored(ppath, commandName, pattern) {
 			seen[pattern] = true
+
 			continue
 		}
 
@@ -82,6 +87,7 @@ func patternsOk(seen matchCache, ppath *Ppath, commandName, section string, patt
 				}
 			} else if len(matches) > 0 {
 				seen[pattern] = true
+
 				continue
 			}
 		}

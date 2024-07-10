@@ -18,6 +18,7 @@ func init() {
 }
 
 func TestPaths(t *testing.T) {
+	t.Parallel()
 	config, err := PreciousConfig("testdata/precious.toml")
 	assert.NoError(t, err)
 	success, err := Paths(config)
@@ -26,6 +27,7 @@ func TestPaths(t *testing.T) {
 }
 
 func TestPathsFailure(t *testing.T) {
+	t.Parallel()
 	config, err := PreciousConfig("testdata/precious-fail.toml")
 	assert.NoError(t, err)
 	success, err := Paths(config)
@@ -34,6 +36,7 @@ func TestPathsFailure(t *testing.T) {
 }
 
 func TestPatternsOkFailure(t *testing.T) {
+	t.Parallel()
 	ignoreConfig, err := PpathConfig(".ppath.toml")
 	assert.NoError(t, err)
 
@@ -50,6 +53,7 @@ func TestPatternsOkFailure(t *testing.T) {
 }
 
 func TestPatternsOkSuccess(t *testing.T) {
+	t.Parallel()
 	ignoreConfig, err := PpathConfig(".ppath.toml")
 	assert.NoError(t, err)
 
@@ -70,6 +74,7 @@ func TestPatternsOkSuccess(t *testing.T) {
 }
 
 func TestPatternIgnored(t *testing.T) {
+	t.Parallel()
 	ignoreConfig, err := PpathConfig(".ppath.toml")
 	assert.NoError(t, err)
 
