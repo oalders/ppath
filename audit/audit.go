@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mattn/go-zglob"
+	"github.com/oalders/go-zglob"
 	"github.com/pkg/errors"
 )
 
