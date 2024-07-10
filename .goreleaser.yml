@@ -1,5 +1,6 @@
 ---
 project_name: 'ppath'
+version: 2
 
 env:
   - 'GO111MODULE=on'
@@ -41,7 +42,11 @@ snapshot:
   name_template: '{{ .Tag }}-next'
 
 changelog:
-  skip: true
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
 
 nfpms:
   -
